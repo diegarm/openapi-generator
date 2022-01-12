@@ -6803,6 +6803,13 @@ public class DefaultCodegen implements CodegenConfig {
                 // Schema with additionalproperties: true (including composed schemas with additionalproperties: true)
                 updateRequestBodyForMap(codegenParameter, schema, name, imports, bodyParameterName);
             } else if (ModelUtils.isComposedSchema(schema)) {
+                /*DIEGO*/
+            	ComposedSchema composedModel = (ComposedSchema) schema;
+            	
+            	if(name == null)
+            		name = SchemaUtils.getNameCompose(composedModel);
+            	
+            	/*DIEGO*/
                 this.addBodyModelSchema(codegenParameter, name, schema, imports, bodyParameterName, false);
             } else if (ModelUtils.isObjectSchema(schema)) {
                 // object type schema OR (AnyType schema with properties defined)

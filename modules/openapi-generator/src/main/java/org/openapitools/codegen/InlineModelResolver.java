@@ -21,6 +21,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.swagger.models.Path;
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.callbacks.Callback;
@@ -30,6 +32,8 @@ import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import org.openapitools.codegen.utils.ModelUtils;
+import org.openapitools.codegen.utils.SchemaUtils;
+import org.openapitools.codegen.utils.URLPathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -417,11 +421,41 @@ public class InlineModelResolver {
      * @param openAPI target spec
      */
     private void flattenComponents(OpenAPI openAPI) {
-        Map<String, Schema> models = openAPI.getComponents().getSchemas();
-        if (models == null) {
-            return;
-        }
 
+    	Map<String, Schema> models = openAPI.getComponents().getSchemas();
+    	
+    	  if (models == null) {
+              return;
+          }       
+          
+    	
+    	/*DIEGO*/
+    	Paths paths = openAPI.getPaths();
+    	
+    	if (paths == null) {
+    		return;    		
+    	}
+    	
+    	List<String> pathNames = new ArrayList<String>(paths.keySet());    	    	
+    	for (String path : pathNames) {
+    		PathItem pathItem = paths.get(path);
+    		Operation operation = URLPathUtils.getOperation(pathItem);
+    		RequestBody reque = operation.getRequestBody();
+    		Content cont = reque.getContent();
+    		List<String> teste = new ArrayList<String>(cont.keySet());
+    		for (String t : teste) {
+    			MediaType media = cont.get(t);
+    			Schema schema = media.getSchema();
+    			if (ModelUtils.isComposedSchema(schema)) {
+    				ComposedSchema composedModel = (ComposedSchema) schema;
+
+    				models.put(SchemaUtils.getNameCompose(composedModel), schema);
+    			}
+    			
+    		}
+    	}
+    	/*DIEGO*/
+    
         List<String> modelNames = new ArrayList<String>(models.keySet());
         for (String modelName : modelNames) {
             Schema model = models.get(modelName);
