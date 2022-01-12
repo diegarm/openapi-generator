@@ -18,6 +18,8 @@
 package org.openapitools.codegen.utils;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.oas.models.servers.ServerVariables;
@@ -238,5 +240,18 @@ public class URLPathUtils {
             return Pattern.matches("^(\\/[\\w\\d]+)+", firstServer.getUrl());
         }
         return false;
+    }
+    
+    public static Operation getOperation(PathItem path) {
+        
+    	if (path.getGet() != null)  return path.getGet();
+		if (path.getPost() != null)	return path.getPost();
+        if (path.getPut() != null) return path.getPut();
+        if (path.getDelete() != null) return path.getDelete();
+        if (path.getOptions() != null) return path.getOptions(); 
+        if (path.getHead() != null) return path.getHead();
+        if (path.getPatch() != null) return path.getPatch();
+	
+        return null;
     }
 }
