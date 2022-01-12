@@ -426,36 +426,9 @@ public class InlineModelResolver {
     	
     	  if (models == null) {
               return;
-          }       
-          
+          }                
     	
-    	/*DIEGO*/
-    	Paths paths = openAPI.getPaths();
-    	
-    	if (paths == null) {
-    		return;    		
-    	}
-    	
-    	List<String> pathNames = new ArrayList<String>(paths.keySet());    	    	
-    	for (String path : pathNames) {
-    		PathItem pathItem = paths.get(path);
-    		Operation operation = URLPathUtils.getOperation(pathItem);
-    		RequestBody reque = operation.getRequestBody();
-    		Content cont = reque.getContent();
-    		List<String> teste = new ArrayList<String>(cont.keySet());
-    		for (String t : teste) {
-    			MediaType media = cont.get(t);
-    			Schema schema = media.getSchema();
-    			if (ModelUtils.isComposedSchema(schema)) {
-    				ComposedSchema composedModel = (ComposedSchema) schema;
-
-    				models.put(SchemaUtils.getNameCompose(composedModel), schema);
-    			}
-    			
-    		}
-    	}
-    	/*DIEGO*/
-    
+    	    
         List<String> modelNames = new ArrayList<String>(models.keySet());
         for (String modelName : modelNames) {
             Schema model = models.get(modelName);
