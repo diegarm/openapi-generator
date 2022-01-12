@@ -1,4 +1,4 @@
-aspnetCoreVersion: "3.1"
+aspnetCoreVersion: "5.0-bpi"
 useSwashbuckle: "false"
 classModifier: "abstract"
 generateBody: "false"
