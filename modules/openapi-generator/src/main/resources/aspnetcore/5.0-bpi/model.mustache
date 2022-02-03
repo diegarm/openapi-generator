@@ -55,8 +55,7 @@ namespace {{modelPackage}}
         [StringLength({{maxLength}}, MinimumLength={{minLength}})]{{/maxLength}}{{/minLength}}{{#minLength}}{{^maxLength}}
         [MinLength({{minLength}})]{{/maxLength}}{{/minLength}}{{^minLength}}{{#maxLength}}
         [MaxLength({{.}})]{{/maxLength}}{{/minLength}}{{#minimum}}{{#maximum}}
-        [Range({{minimum}}, {{maximum}})]{{/maximum}}{{/minimum}}
-        {{#minItems}}
+        [Range({{minimum}}, {{maximum}})]{{/maximum}}{{/minimum}}{{#minItems}}        
         [MinLength({{minItems}})]{{/minItems}}{{#maxItems}}
         [MaxLength({{maxItems}})]{{/maxItems}}
         [DataMember(Name="{{baseName}}", EmitDefaultValue={{#isNullable}}true{{/isNullable}}{{^isNullable}}false{{/isNullable}})]
