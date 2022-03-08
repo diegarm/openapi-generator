@@ -92,7 +92,12 @@ namespace {{modelPackage}}
         /// <returns>JSON string presentation of the object</returns>
         public {{#parent}}{{^isMap}}{{^isArray}}new {{/isArray}}{{/isMap}}{{/parent}}string ToJson()
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+            JsonSerializerOptions options = new JsonSerializerOptions{
+                Converters = {
+                    new JsonStringEnumConverter()
+                }
+            };
+            return JsonSerializer.Serialize(this,options);
         }
 
         /// <summary>
