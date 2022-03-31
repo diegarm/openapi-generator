@@ -379,6 +379,12 @@ public class AspNetCoreServerCodegen extends AbstractCSharpCodegen {
         supportingFiles.add(new SupportingFile("gitignore", packageFolder, ".gitignore"));
         supportingFiles.add(new SupportingFile("validateModel.mustache", packageFolder + File.separator + "Attributes", "ValidateModelStateAttribute.cs"));
         supportingFiles.add(new SupportingFile("typeConverter.mustache", packageFolder + File.separator + "Converters", "CustomEnumConverter.cs"));
+        
+        //Custom BPI
+        if(aspnetCoreVersion.getOptValue().toLowerCase(Locale.ROOT).contains("bpi")) {
+        	supportingFiles.add(new SupportingFile("stringEnumConverter.mustache", packageFolder + File.separator + "Converters", "StringCustomEnumConverter.cs"));
+        }
+        
         if (aspnetCoreVersion.getOptValue().startsWith("3.") || aspnetCoreVersion.getOptValue().startsWith("5.0")) {
             supportingFiles.add(new SupportingFile("OpenApi" + File.separator + "TypeExtensions.mustache", packageFolder + File.separator + "OpenApi", "TypeExtensions.cs"));
         }
