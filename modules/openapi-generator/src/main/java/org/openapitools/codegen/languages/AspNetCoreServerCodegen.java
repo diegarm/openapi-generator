@@ -737,4 +737,12 @@ public class AspNetCoreServerCodegen extends AbstractCSharpCodegen {
             LOGGER.info("Swashbuckle version: {}", swashbuckleVersion.getOptValue());
         }
     }
+    
+    @Override
+    public void postProcess() {
+        System.out.println("################################################################################");
+        System.out.println("# Thanks for using OpenAPI Generator -> DAAB                                   #");
+        System.out.println("# This is a custom version for BPI - FAST Team - Version 1.0.2 - 2022-04-05    #");
+        System.out.println("################################################################################");
+    }
 }
