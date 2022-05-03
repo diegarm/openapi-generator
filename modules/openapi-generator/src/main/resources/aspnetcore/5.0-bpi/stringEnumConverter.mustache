@@ -1,0 +1,31 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+
+namespace {{packageName}}.Converters
+{
+    /// <summary>
+    /// Custom string to enum converter
+    /// </summary>
+    public class CustomStringEnumConverter : StringEnumConverter
+    {
+        /// Reads the JSON representation of the object. 
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            object objConverted;
+
+            try
+            {
+                objConverted = base.ReadJson(reader, objectType, existingValue, serializer);
+
+            }
+            catch (JsonSerializationException)
+            {
+                //Hide code error
+                throw new JsonSerializationException($"The value \"{reader.Value}\" is invalid for field \"{reader.Path}\"");
+            }
+
+            return objConverted;
+        }
+    }
+}
