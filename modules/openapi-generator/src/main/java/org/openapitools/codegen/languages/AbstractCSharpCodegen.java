@@ -667,6 +667,12 @@ public abstract class AbstractCSharpCodegen extends DefaultCodegen implements Co
                 List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
                 for (CodegenOperation operation : ops) {
 
+                	//DAAB - Update Parameters (Model)
+                	updateParametersModel(operation.allParams);
+                	
+                	//DAAB - Update Response (Model) 
+                	updateResponseModel(operation.responses);                	
+                	
                     // Check return types for collection
                     if (operation.returnType != null) {
                         String typeMapping;
@@ -757,6 +763,29 @@ public abstract class AbstractCSharpCodegen extends DefaultCodegen implements Co
         }
 
         return objs;
+    }
+    
+    private void updateParametersModel(List<CodegenParameter> allParams) {
+    	for (CodegenParameter codegenParam : allParams) {
+    		
+    		if(!codegenParam.isPrimitiveType) {
+    			codegenParam.dataType = getModelReady()+ codegenParam.dataType;
+    		}                		
+		}		
+	}
+
+	private void updateResponseModel(List<CodegenResponse> responses) {
+    	for (CodegenResponse codegenResp : responses) {
+    		
+    		if(!codegenResp.simpleType && !codegenResp.primitiveType) {
+    			codegenResp.dataType = codegenResp.dataType.replace(codegenResp.baseType, getModelReady() +codegenResp.baseType);
+    		}    		
+		}		
+	}
+
+	private String getModelReady() 
+    {
+    	return StringUtils.capitalize(CodegenConstants.MODELS)+".";    	
     }
 
     protected void processOperation(CodegenOperation operation) {
