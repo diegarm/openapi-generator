@@ -1,6 +1,10 @@
+{{>partial_header}}
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace {{packageName}}.Converters
 {
@@ -9,23 +13,46 @@ namespace {{packageName}}.Converters
     /// </summary>
     public class CustomStringEnumConverter : StringEnumConverter
     {
-        /// Reads the JSON representation of the object. 
+       /// Reads the JSON representation of the object. 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             object objConverted;
 
             try
             {
+                if(!IsValid(objectType, reader.Value))
+                    throw CreateException(reader);
+
                 objConverted = base.ReadJson(reader, objectType, existingValue, serializer);
 
+                
             }
             catch (JsonSerializationException)
             {
                 //Hide code error
-                throw new JsonSerializationException($"The value \"{reader.Value}\" is invalid for field \"{reader.Path}\"");
+                throw CreateException(reader);
             }
 
             return objConverted;
+        }
+
+      
+
+        private static bool IsValid(Type objectType, object objConverted)
+        {
+            var result = objectType.GetTypeInfo()
+                .DeclaredMembers
+                .Where(e => e.GetCustomAttributes().Count() > 0)
+                .Where(f => f.GetCustomAttribute<EnumMemberAttribute>().Value.ToLower() == objConverted.ToString().ToLower())
+                .Count() > 0;
+
+            return result;
+        }
+
+        private JsonSerializationException CreateException(JsonReader reader)
+        {
+            string EXCEPTION_MESSAGE = "The value [{0}] is invalid for field [{1}]";
+            return new JsonSerializationException(String.Format(EXCEPTION_MESSAGE, reader.Value, reader.Path));
         }
     }
 }

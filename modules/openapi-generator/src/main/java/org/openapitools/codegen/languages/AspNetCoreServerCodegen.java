@@ -741,8 +741,8 @@ public class AspNetCoreServerCodegen extends AbstractCSharpCodegen {
     @Override
     public void postProcess() {
         System.out.println("################################################################################");
-        System.out.println("# Thanks for using OpenAPI Generator -> DAAB                                   #");
-        System.out.println("# This is a custom version for BPI - FAST Team - Version 1.0.3 - 2022-05-06    #");
+        System.out.println("# Thanks for using OpenAPI Generator -> DIEGARM - DAAB                         #");
+        System.out.println("# This is a custom version for BPI - FAST Team - Version 1.0.4 - 2022-08-02    #");
         System.out.println("################################################################################");
     }
 
