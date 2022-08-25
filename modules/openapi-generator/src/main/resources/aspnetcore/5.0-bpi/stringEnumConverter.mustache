@@ -40,11 +40,12 @@ namespace {{packageName}}.Converters
 
         private static bool IsValid(Type objectType, object objConverted)
         {
-            var result = objectType.GetTypeInfo()
-                .DeclaredMembers
-                .Where(e => e.GetCustomAttributes().Count() > 0)
-                .Where(f => f.GetCustomAttribute<EnumMemberAttribute>().Value.ToLower() == objConverted.ToString().ToLower())
-                .Count() > 0;
+            var result = objectType.GetTypeInfo().DeclaredFields.Where(e => e.FieldType.IsEnum == true)
+                .FirstOrDefault()
+                .FieldType
+                .GetMembers()
+                .Where(e => e.MemberType == MemberTypes.Field && e.CustomAttributes.Count() > 0 && e.GetCustomAttribute<EnumMemberAttribute>().Value.ToLower() == objConverted.ToString().ToLower())
+                .Count() > 0;            
 
             return result;
         }
